@@ -8,11 +8,17 @@ print("[INFO] Memuat model deteksi wajah...")
 face_net = cv2.dnn.readNetFromCaffe("models/deploy.prototxt.txt", 
                                     "models/res10_300x300_ssd_iter_140000.caffemodel")
 
-print("[INFO] Memuat model deteksi masker Keras 3...")
+print("[INFO] Memuat model deteksi masker Keras 3 (3 Classes)...")
 mask_net = keras.models.load_model("models/mask_detector.keras")
 
 cap = cv2.VideoCapture(0)
 min_confidence = 0.5
+
+categories = {
+    0: ("Masker Tidak Rapi", (0, 165, 255)), 
+    1: ("Bermasker", (0, 255, 0)),          
+    2: ("Tanpa Masker", (0, 0, 255))        
+}
 
 while True:
     ret, frame = cap.read()
@@ -43,13 +49,13 @@ while True:
                 face = preprocess_input(face)
                 face = np.expand_dims(face, axis=0)
 
-                preds = mask_net.predict(face, verbose=0)
-                (mask, withoutMask) = preds[0]
+                preds = mask_net.predict(face, verbose=0)[0]
+                idx = np.argmax(preds)
+                
+                label, color = categories[idx]
 
-                label = "Bermasker" if mask > withoutMask else "Tanpa Masker"
-                color = (0, 255, 0) if label == "Bermasker" else (0, 0, 255)
-
-                text = f"{label}: {max(mask, withoutMask) * 100:.2f}%"
+                text = f"{label}: {preds[idx] * 100:.2f}%"
+                
                 cv2.putText(frame, text, (startX, startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 2)
                 cv2.rectangle(frame, (startX, startY), (endX, endY), color, 2)
     

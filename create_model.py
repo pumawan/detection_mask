@@ -30,10 +30,6 @@ for xml_file in os.listdir(ANNOT_PATH):
     
     for obj in root.findall("object"):
         label = obj.find("name").text
-        if label == "mask_weared_incorrectly" or label=="without_mask": 
-            label = "no_mask"
-        else:
-            label = "mask"
         
         box = obj.find("bndbox")
         xmin = int(box.find("xmin").text)
@@ -65,7 +61,7 @@ headModel = AveragePooling2D(pool_size=(7, 7))(headModel)
 headModel = Flatten(name="flatten")(headModel)
 headModel = Dense(128, activation="relu")(headModel)
 headModel = Dropout(0.5)(headModel)
-headModel = Dense(2, activation="softmax")(headModel)
+headModel = Dense(3, activation="softmax")(headModel)
 
 model = Model(inputs=baseModel.input, outputs=headModel)
 
