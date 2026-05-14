@@ -15,7 +15,13 @@ This project is a real-time Face Mask Detection System built using Python, OpenC
 > Keras 3 Ready: Fully compatible with the latest Python 3.12+ environments, avoiding legacy naming conflicts.
 
 # 📂 Project Structure
-> create_model.py: Script to process the Kaggle XML dataset and train the .keras model.
-> detect_mask_video.py: The main execution script for real-time inference via webcam.
-> models/: Directory containing the pre-trained face detector and the trained mask classifier.
-> dataset/: Directory containing images and annotations the pre-trained Data.
+> create_model.py
+1. Script to process the Kaggle XML dataset and train the .keras model.
+> detect_mask_video.py: 
+2. The main execution script for real-time inference via webcam.
+> models/: 
+3. Directory containing the pre-trained face detector and the trained mask classifier.
+> dataset/: 
+4. Directory containing images and annotations the pre-trained Data.
+> dist/:
+5. Application build (.exe)
